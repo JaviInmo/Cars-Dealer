@@ -1,0 +1,63 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%; /* #ffffff */
+    --foreground: 215 25% 27%; /* #1f2937 */
+    --card: 210 40% 98%; /* #f1f5f9 */
+    --card-foreground: 215 25% 27%; /* #1f2937 */
+    --popover: 0 0% 100%; /* #ffffff */
+    --popover-foreground: 215 25% 27%; /* #1f2937 */
+    --primary: 45 100% 51%; /* mustard yellow #d4af37 */
+    --primary-foreground: 0 0% 6%; /* black text on yellow */
+    --secondary: 0 0% 0%; /* #000000 black */
+    --secondary-foreground: 0 0% 100%; /* #ffffff */
+    --muted: 220 13% 46%; /* #6b7280 */
+    --muted-foreground: 0 0% 100%; /* #ffffff */
+    --accent: 45 100% 51%; /* mustard yellow */
+    --accent-foreground: 0 0% 6%; /* black text */
+    --destructive: 0 84% 60%; /* #ea580c */
+    --destructive-foreground: 0 0% 100%; /* #ffffff */
+    --border: 220 13% 91%; /* #e5e7eb */
+    --input: 210 40% 98%; /* #f1f5f9 */
+    --ring: 45 100% 51%; /* mustard yellow ring */
+    --radius: 0.5rem;
+
+    /* Font variables */
+    --font-geist-sans: "Geist Sans", system-ui, sans-serif;
+    --font-geist-mono: "Geist Mono", monospace;
+  }
+
+  .dark {
+    --background: 224 71% 4%;
+    --foreground: 213 31% 91%;
+    --card: 224 71% 4%;
+    --card-foreground: 213 31% 91%;
+    --popover: 224 71% 4%;
+    --popover-foreground: 213 31% 91%;
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 215 27.9% 16.9%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 215 27.9% 16.9%;
+    --muted-foreground: 217.9 10.6% 64.9%;
+    --accent: 215 27.9% 16.9%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 63% 31%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 215 27.9% 16.9%;
+    --input: 215 27.9% 16.9%;
+    --ring: 216 34% 17%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
