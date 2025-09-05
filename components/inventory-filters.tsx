@@ -1,54 +1,17 @@
-"use client"
-
-import { useState } from "react"
-import { ChevronDown, Calendar, Car, Truck, DollarSign, Gauge, Palette, Fuel, Settings } from "lucide-react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
-import { Button } from "@/components/ui/button"
-
-const filterData = {
-  years: ["2024", "2023", "2022", "2021", "2020", "2019", "2018", "2017", "2016", "2015"],
-  makes: ["Toyota", "Chevrolet", "Ford", "Honda", "Nissan", "Hyundai", "Kia", "Mazda"],
-  models: {
-    Toyota: ["Camry", "Corolla", "RAV4", "Highlander", "Prius", "Tacoma", "Tundra", "Sienna"],
-    Chevrolet: ["Silverado", "Equinox", "Malibu", "Traverse", "Tahoe", "Suburban"],
-    Ford: ["F-150", "Explorer", "Escape", "Mustang", "Edge", "Expedition"],
-  },
-  bodyTypes: ["Sedan", "SUV", "Truck", "Hatchback", "Coupe", "Convertible", "Wagon", "Minivan"],
-  priceRanges: [
-    "0 - 5,000",
-    "5,000 - 10,000",
-    "10,000 - 15,000",
-    "15,000 - 20,000",
-    "20,000 - 25,000",
-    "25,000 - 30,000",
-    "30,000 - 35,000",
-    "35,000 - 40,000",
-    "40,000 - 50,000",
-  ],
-  drivetrains: ["FWD", "RWD", "AWD", "4WD"],
-  transmissions: ["Automatic", "Manual", "CVT"],
-  mileageRanges: [
-    "0 - 50,000",
-    "50,000 - 60,000",
-    "60,000 - 70,000",
-    "70,000 - 80,000",
-    "80,000 - 90,000",
-    "90,000 - 100,000",
-    "100,000 - 110,000",
-    "110,000 - 120,000",
-    "120,000 - 130,000",
-    "130,000 - 140,000",
-    "140,000 - 150,000",
-    "150,000 - 160,000",
-    "160,000 - 170,000",
-    "170,000 - 180,000",
-  ],
-  exteriorColors: ["White", "Black", "Silver", "Gray", "Red", "Blue", "Green", "Brown", "Gold"],
-  highwayMpg: ["15-20", "20-25", "25-30", "30-35", "35-40"],
-  cityMpg: ["15-20", "20-25", "25-30", "30-35", "35-40"],
-}
+import React, { useState } from 'react';
+import { 
+  Search, 
+  SlidersHorizontal, 
+  X, 
+  Calendar, 
+  Car, 
+  DollarSign, 
+  Gauge, 
+  Palette,
+  Settings,
+  Fuel,
+  ChevronDown
+} from 'lucide-react';
 
 interface FilterState {
   years: string[]
@@ -64,38 +27,50 @@ interface FilterState {
   cityMpg: string[]
 }
 
-interface InventoryFiltersProps {
+interface ModernCarFilterProps {
   activeFilters: FilterState
   onFiltersChange: (filters: FilterState) => void
 }
 
-export function InventoryFilters({ activeFilters, onFiltersChange }: InventoryFiltersProps) {
-  const [openSections, setOpenSections] = useState<Record<string, boolean>>({
-    year: true,
-    make: true,
-    model: false,
-    bodyType: false,
-    price: false,
-    drivetrain: false,
-    transmission: false,
-    mileage: false,
-    exteriorColor: false,
-    highwayMpg: false,
-    cityMpg: false,
-  })
+const filterData = {
+  years: ["2024", "2023", "2022", "2021", "2020", "2019", "2018", "2017", "2016", "2015"],
+  makes: ["Toyota", "Chevrolet", "Ford", "Honda", "Nissan", "Hyundai", "Kia", "Mazda"],
+  models: {
+    Toyota: ["Camry", "Corolla", "RAV4", "Highlander", "Prius", "Tacoma"],
+    Chevrolet: ["Silverado", "Equinox", "Malibu", "Traverse", "Tahoe"],
+    Ford: ["F-150", "Explorer", "Escape", "Mustang", "Edge"],
+  },
+  bodyTypes: ["Sedan", "SUV", "Truck", "Hatchback", "Coupe", "Convertible"],
+  priceRanges: ["0-10K", "10K-20K", "20K-30K", "30K-40K", "40K-50K", "50K+"],
+  drivetrains: ["FWD", "RWD", "AWD", "4WD"],
+  transmissions: ["Automatic", "Manual", "CVT"],
+  mileageRanges: ["0-50K", "50K-100K", "100K-150K", "150K+"],
+  exteriorColors: ["White", "Black", "Silver", "Gray", "Red", "Blue", "Green"],
+  mpgRanges: ["15-20", "20-25", "25-30", "30-35", "35-40", "40+"],
+}
 
-  const toggleSection = (section: string) => {
-    setOpenSections((prev) => ({ ...prev, [section]: !prev[section] }))
-  }
+const quickFilters = [
+  { label: "Bajo Millaje", key: "lowMileage", icon: Gauge },
+  { label: "Económico", key: "affordable", icon: DollarSign },
+  { label: "SUVs", key: "suv", icon: Car },
+  { label: "Nuevos", key: "new", icon: Calendar },
+]
 
-  const handleFilterChange = (category: keyof FilterState, value: string, checked: boolean) => {
-    const newFilters = {
+export function ModernCarFilter({ activeFilters, onFiltersChange }: ModernCarFilterProps) {
+  const [isExpanded, setIsExpanded] = useState(false)
+  const [searchTerm, setSearchTerm] = useState("")
+  const [activeCategory, setActiveCategory] = useState<string | null>(null)
+
+  const handleFilterChange = (category: keyof FilterState, value: string) => {
+    const currentValues = activeFilters[category]
+    const newValues = currentValues.includes(value)
+      ? currentValues.filter(item => item !== value)
+      : [...currentValues, value]
+    
+    onFiltersChange({
       ...activeFilters,
-      [category]: checked
-        ? [...activeFilters[category], value]
-        : activeFilters[category].filter((item) => item !== value),
-    }
-    onFiltersChange(newFilters)
+      [category]: newValues
+    })
   }
 
   const clearAllFilters = () => {
@@ -114,384 +89,264 @@ export function InventoryFilters({ activeFilters, onFiltersChange }: InventoryFi
     })
   }
 
-  const getActiveFiltersCount = () => {
-    return Object.values(activeFilters).reduce((total, filterArray) => total + filterArray.length, 0)
+  const getActiveCount = () => {
+    return Object.values(activeFilters).reduce((total, arr) => total + arr.length, 0)
   }
 
-  const availableModels =
-    activeFilters.makes.length > 0
-      ? activeFilters.makes.flatMap((make) => filterData.models[make as keyof typeof filterData.models] || [])
-      : Object.values(filterData.models).flat()
+  const applyQuickFilter = (filterKey: string) => {
+    switch (filterKey) {
+      case 'lowMileage':
+        handleFilterChange('mileageRanges', '0-50K')
+        break
+      case 'affordable':
+        handleFilterChange('priceRanges', '0-10K')
+        break
+      case 'suv':
+        handleFilterChange('bodyTypes', 'SUV')
+        break
+      case 'new':
+        handleFilterChange('years', '2024')
+        break
+    }
+  }
+
+  const FilterChip = ({ value, onRemove }: { value: string, onRemove: () => void }) => (
+    <div className="inline-flex items-center gap-1 bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">
+      {value}
+      <X className="h-3 w-3 cursor-pointer hover:bg-blue-200 rounded-full" onClick={onRemove} />
+    </div>
+  )
+
+  const CategoryButton = ({ 
+    title, 
+    icon: Icon, 
+    count, 
+    isActive, 
+    onClick 
+  }: { 
+    title: string
+    icon: any
+    count: number
+    isActive: boolean
+    onClick: () => void
+  }) => (
+    <button
+      onClick={onClick}
+      className={`flex items-center gap-2 px-4 py-3 rounded-xl transition-all duration-200 ${
+        isActive 
+          ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/25' 
+          : 'bg-gray-50 hover:bg-gray-100 text-gray-700'
+      }`}
+    >
+      <Icon className="h-4 w-4" />
+      <span className="font-medium">{title}</span>
+      {count > 0 && (
+        <span className={`text-xs px-2 py-0.5 rounded-full ${
+          isActive ? 'bg-white/20' : 'bg-blue-100 text-blue-600'
+        }`}>
+          {count}
+        </span>
+      )}
+    </button>
+  )
+
+  const OptionGrid = ({ options, category }: { options: string[], category: keyof FilterState }) => (
+    <div className="grid grid-cols-2 gap-2 mt-4">
+      {options
+        .filter(option => option.toLowerCase().includes(searchTerm.toLowerCase()))
+        .map((option) => {
+          const isSelected = activeFilters[category].includes(option)
+          return (
+            <button
+              key={option}
+              onClick={() => handleFilterChange(category, option)}
+              className={`p-3 rounded-lg text-left transition-all duration-200 ${
+                isSelected
+                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/25'
+                  : 'bg-gray-50 hover:bg-gray-100 border border-gray-200 hover:border-gray-300'
+              }`}
+            >
+              <div className="font-medium text-sm">{option}</div>
+            </button>
+          )
+        })
+      }
+    </div>
+  )
+
+  const categories = [
+    { key: 'years', title: 'Año', icon: Calendar, options: filterData.years },
+    { key: 'makes', title: 'Marca', icon: Car, options: filterData.makes },
+    { key: 'bodyTypes', title: 'Tipo', icon: Car, options: filterData.bodyTypes },
+    { key: 'priceRanges', title: 'Precio', icon: DollarSign, options: filterData.priceRanges },
+    { key: 'mileageRanges', title: 'Millaje', icon: Gauge, options: filterData.mileageRanges },
+    { key: 'exteriorColors', title: 'Color', icon: Palette, options: filterData.exteriorColors },
+  ]
 
   return (
-    <Card className="sticky top-24">
-      <CardHeader>
-        <div className="flex items-center justify-between">
-          <CardTitle className="text-lg">Filtros</CardTitle>
-          {getActiveFiltersCount() > 0 && (
-            <Button variant="outline" size="sm" onClick={clearAllFilters}>
-              Limpiar ({getActiveFiltersCount()})
-            </Button>
+    <div className="bg-white rounded-2xl shadow-xl shadow-gray-900/10 border border-gray-100">
+      {/* Header */}
+      <div className="p-6 border-b border-gray-100">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-3">
+            <div className="p-2 bg-blue-100 rounded-xl">
+              <SlidersHorizontal className="h-5 w-5 text-blue-600" />
+            </div>
+            <h2 className="text-xl font-bold text-gray-900">Filtros</h2>
+            {getActiveCount() > 0 && (
+              <span className="bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-medium">
+                {getActiveCount()}
+              </span>
+            )}
+          </div>
+          {getActiveCount() > 0 && (
+            <button
+              onClick={clearAllFilters}
+              className="text-gray-500 hover:text-red-600 transition-colors text-sm font-medium"
+            >
+              Limpiar todo
+            </button>
           )}
         </div>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        {/* Year Filter */}
-        <Collapsible open={openSections.year} onOpenChange={() => toggleSection("year")}>
-          <CollapsibleTrigger asChild>
-            <Button variant="ghost" className="w-full justify-between p-0 h-auto">
-              <div className="flex items-center space-x-2">
-                <Calendar className="h-4 w-4 text-primary" />
-                <span className="font-medium">Año</span>
-                {activeFilters.years.length > 0 && (
-                  <span className="text-xs bg-primary text-primary-foreground px-2 py-1 rounded-full">
-                    {activeFilters.years.length}
-                  </span>
-                )}
-              </div>
-              <ChevronDown className={`h-4 w-4 transition-transform ${openSections.year ? "rotate-180" : ""}`} />
-            </Button>
-          </CollapsibleTrigger>
-          <CollapsibleContent className="mt-2 space-y-2">
-            {filterData.years.map((year) => (
-              <div key={year} className="flex items-center space-x-2">
-                <Checkbox
-                  id={`year-${year}`}
-                  checked={activeFilters.years.includes(year)}
-                  onCheckedChange={(checked) => handleFilterChange("years", year, checked as boolean)}
-                />
-                <label htmlFor={`year-${year}`} className="text-sm cursor-pointer">
-                  {year}
-                </label>
-              </div>
-            ))}
-          </CollapsibleContent>
-        </Collapsible>
 
-        {/* Make Filter */}
-        <Collapsible open={openSections.make} onOpenChange={() => toggleSection("make")}>
-          <CollapsibleTrigger asChild>
-            <Button variant="ghost" className="w-full justify-between p-0 h-auto">
-              <div className="flex items-center space-x-2">
-                <Car className="h-4 w-4 text-primary" />
-                <span className="font-medium">Marca</span>
-                {activeFilters.makes.length > 0 && (
-                  <span className="text-xs bg-primary text-primary-foreground px-2 py-1 rounded-full">
-                    {activeFilters.makes.length}
-                  </span>
-                )}
-              </div>
-              <ChevronDown className={`h-4 w-4 transition-transform ${openSections.make ? "rotate-180" : ""}`} />
-            </Button>
-          </CollapsibleTrigger>
-          <CollapsibleContent className="mt-2 space-y-2">
-            {filterData.makes.map((make) => (
-              <div key={make} className="flex items-center space-x-2">
-                <Checkbox
-                  id={`make-${make}`}
-                  checked={activeFilters.makes.includes(make)}
-                  onCheckedChange={(checked) => handleFilterChange("makes", make, checked as boolean)}
-                />
-                <label htmlFor={`make-${make}`} className="text-sm cursor-pointer">
-                  {make}
-                </label>
-              </div>
-            ))}
-          </CollapsibleContent>
-        </Collapsible>
+        {/* Search Bar */}
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+          <input
+            type="text"
+            placeholder="Buscar marca, modelo..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+          />
+        </div>
 
-        {/* Model Filter */}
-        <Collapsible open={openSections.model} onOpenChange={() => toggleSection("model")}>
-          <CollapsibleTrigger asChild>
-            <Button variant="ghost" className="w-full justify-between p-0 h-auto">
-              <div className="flex items-center space-x-2">
-                <Car className="h-4 w-4 text-primary" />
-                <span className="font-medium">Modelo</span>
-                {activeFilters.models.length > 0 && (
-                  <span className="text-xs bg-primary text-primary-foreground px-2 py-1 rounded-full">
-                    {activeFilters.models.length}
-                  </span>
-                )}
-              </div>
-              <ChevronDown className={`h-4 w-4 transition-transform ${openSections.model ? "rotate-180" : ""}`} />
-            </Button>
-          </CollapsibleTrigger>
-          <CollapsibleContent className="mt-2 space-y-2">
-            {availableModels.map((model) => (
-              <div key={model} className="flex items-center space-x-2">
-                <Checkbox
-                  id={`model-${model}`}
-                  checked={activeFilters.models.includes(model)}
-                  onCheckedChange={(checked) => handleFilterChange("models", model, checked as boolean)}
-                />
-                <label htmlFor={`model-${model}`} className="text-sm cursor-pointer">
-                  {model}
-                </label>
-              </div>
-            ))}
-          </CollapsibleContent>
-        </Collapsible>
+        {/* Quick Filters */}
+        <div className="flex flex-wrap gap-2 mt-4">
+          {quickFilters.map((filter) => {
+            const Icon = filter.icon
+            return (
+              <button
+                key={filter.key}
+                onClick={() => applyQuickFilter(filter.key)}
+                className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-50 to-purple-50 hover:from-blue-100 hover:to-purple-100 rounded-xl transition-all duration-200 text-sm font-medium text-gray-700"
+              >
+                <Icon className="h-4 w-4" />
+                {filter.label}
+              </button>
+            )
+          })}
+        </div>
+      </div>
 
-        {/* Body Type Filter */}
-        <Collapsible open={openSections.bodyType} onOpenChange={() => toggleSection("bodyType")}>
-          <CollapsibleTrigger asChild>
-            <Button variant="ghost" className="w-full justify-between p-0 h-auto">
-              <div className="flex items-center space-x-2">
-                <Truck className="h-4 w-4 text-primary" />
-                <span className="font-medium">Tipo de Carrocería</span>
-                {activeFilters.bodyTypes.length > 0 && (
-                  <span className="text-xs bg-primary text-primary-foreground px-2 py-1 rounded-full">
-                    {activeFilters.bodyTypes.length}
-                  </span>
-                )}
-              </div>
-              <ChevronDown className={`h-4 w-4 transition-transform ${openSections.bodyType ? "rotate-180" : ""}`} />
-            </Button>
-          </CollapsibleTrigger>
-          <CollapsibleContent className="mt-2 space-y-2">
-            {filterData.bodyTypes.map((bodyType) => (
-              <div key={bodyType} className="flex items-center space-x-2">
-                <Checkbox
-                  id={`bodyType-${bodyType}`}
-                  checked={activeFilters.bodyTypes.includes(bodyType)}
-                  onCheckedChange={(checked) => handleFilterChange("bodyTypes", bodyType, checked as boolean)}
+      {/* Active Filters */}
+      {getActiveCount() > 0 && (
+        <div className="p-6 bg-gray-50 border-b border-gray-100">
+          <div className="flex flex-wrap gap-2">
+            {Object.entries(activeFilters).map(([category, values]) =>
+              values.map((value: string) => (
+                <FilterChip
+                  key={`${category}-${value}`}
+                  value={value}
+                  onRemove={() => handleFilterChange(category as keyof FilterState, value)}
                 />
-                <label htmlFor={`bodyType-${bodyType}`} className="text-sm cursor-pointer">
-                  {bodyType}
-                </label>
-              </div>
-            ))}
-          </CollapsibleContent>
-        </Collapsible>
+              ))
+            )}
+          </div>
+        </div>
+      )}
 
-        {/* Price Filter */}
-        <Collapsible open={openSections.price} onOpenChange={() => toggleSection("price")}>
-          <CollapsibleTrigger asChild>
-            <Button variant="ghost" className="w-full justify-between p-0 h-auto">
-              <div className="flex items-center space-x-2">
-                <DollarSign className="h-4 w-4 text-primary" />
-                <span className="font-medium">Precio</span>
-                {activeFilters.priceRanges.length > 0 && (
-                  <span className="text-xs bg-primary text-primary-foreground px-2 py-1 rounded-full">
-                    {activeFilters.priceRanges.length}
-                  </span>
-                )}
-              </div>
-              <ChevronDown className={`h-4 w-4 transition-transform ${openSections.price ? "rotate-180" : ""}`} />
-            </Button>
-          </CollapsibleTrigger>
-          <CollapsibleContent className="mt-2 space-y-2">
-            {filterData.priceRanges.map((range) => (
-              <div key={range} className="flex items-center space-x-2">
-                <Checkbox
-                  id={`price-${range}`}
-                  checked={activeFilters.priceRanges.includes(range)}
-                  onCheckedChange={(checked) => handleFilterChange("priceRanges", range, checked as boolean)}
-                />
-                <label htmlFor={`price-${range}`} className="text-sm cursor-pointer">
-                  ${range}
-                </label>
-              </div>
-            ))}
-          </CollapsibleContent>
-        </Collapsible>
+      {/* Categories */}
+      <div className="p-6">
+        <div className="grid grid-cols-2 gap-3 mb-6">
+          {categories.map((category) => (
+            <CategoryButton
+              key={category.key}
+              title={category.title}
+              icon={category.icon}
+              count={activeFilters[category.key as keyof FilterState].length}
+              isActive={activeCategory === category.key}
+              onClick={() => setActiveCategory(activeCategory === category.key ? null : category.key)}
+            />
+          ))}
+        </div>
 
-        {/* Drivetrain Filter */}
-        <Collapsible open={openSections.drivetrain} onOpenChange={() => toggleSection("drivetrain")}>
-          <CollapsibleTrigger asChild>
-            <Button variant="ghost" className="w-full justify-between p-0 h-auto">
-              <div className="flex items-center space-x-2">
-                <Settings className="h-4 w-4 text-primary" />
-                <span className="font-medium">Tracción</span>
-                {activeFilters.drivetrains.length > 0 && (
-                  <span className="text-xs bg-primary text-primary-foreground px-2 py-1 rounded-full">
-                    {activeFilters.drivetrains.length}
-                  </span>
-                )}
-              </div>
-              <ChevronDown className={`h-4 w-4 transition-transform ${openSections.drivetrain ? "rotate-180" : ""}`} />
-            </Button>
-          </CollapsibleTrigger>
-          <CollapsibleContent className="mt-2 space-y-2">
-            {filterData.drivetrains.map((drivetrain) => (
-              <div key={drivetrain} className="flex items-center space-x-2">
-                <Checkbox
-                  id={`drivetrain-${drivetrain}`}
-                  checked={activeFilters.drivetrains.includes(drivetrain)}
-                  onCheckedChange={(checked) => handleFilterChange("drivetrains", drivetrain, checked as boolean)}
-                />
-                <label htmlFor={`drivetrain-${drivetrain}`} className="text-sm cursor-pointer">
-                  {drivetrain}
-                </label>
-              </div>
-            ))}
-          </CollapsibleContent>
-        </Collapsible>
-
-        {/* Transmission Filter */}
-        <Collapsible open={openSections.transmission} onOpenChange={() => toggleSection("transmission")}>
-          <CollapsibleTrigger asChild>
-            <Button variant="ghost" className="w-full justify-between p-0 h-auto">
-              <div className="flex items-center space-x-2">
-                <Settings className="h-4 w-4 text-primary" />
-                <span className="font-medium">Transmisión</span>
-                {activeFilters.transmissions.length > 0 && (
-                  <span className="text-xs bg-primary text-primary-foreground px-2 py-1 rounded-full">
-                    {activeFilters.transmissions.length}
-                  </span>
-                )}
-              </div>
-              <ChevronDown
-                className={`h-4 w-4 transition-transform ${openSections.transmission ? "rotate-180" : ""}`}
+        {/* Selected Category Options */}
+        {activeCategory && (
+          <div className="animate-in slide-in-from-top-4 duration-200">
+            <div className="bg-gray-50 rounded-xl p-4">
+              <h3 className="font-semibold text-gray-900 mb-2">
+                {categories.find(cat => cat.key === activeCategory)?.title}
+              </h3>
+              <OptionGrid
+                options={categories.find(cat => cat.key === activeCategory)?.options || []}
+                category={activeCategory as keyof FilterState}
               />
-            </Button>
-          </CollapsibleTrigger>
-          <CollapsibleContent className="mt-2 space-y-2">
-            {filterData.transmissions.map((transmission) => (
-              <div key={transmission} className="flex items-center space-x-2">
-                <Checkbox
-                  id={`transmission-${transmission}`}
-                  checked={activeFilters.transmissions.includes(transmission)}
-                  onCheckedChange={(checked) => handleFilterChange("transmissions", transmission, checked as boolean)}
-                />
-                <label htmlFor={`transmission-${transmission}`} className="text-sm cursor-pointer">
-                  {transmission}
-                </label>
-              </div>
-            ))}
-          </CollapsibleContent>
-        </Collapsible>
+            </div>
+          </div>
+        )}
 
-        {/* Mileage Filter */}
-        <Collapsible open={openSections.mileage} onOpenChange={() => toggleSection("mileage")}>
-          <CollapsibleTrigger asChild>
-            <Button variant="ghost" className="w-full justify-between p-0 h-auto">
-              <div className="flex items-center space-x-2">
-                <Gauge className="h-4 w-4 text-primary" />
-                <span className="font-medium">Millaje</span>
-                {activeFilters.mileageRanges.length > 0 && (
-                  <span className="text-xs bg-primary text-primary-foreground px-2 py-1 rounded-full">
-                    {activeFilters.mileageRanges.length}
-                  </span>
-                )}
-              </div>
-              <ChevronDown className={`h-4 w-4 transition-transform ${openSections.mileage ? "rotate-180" : ""}`} />
-            </Button>
-          </CollapsibleTrigger>
-          <CollapsibleContent className="mt-2 space-y-2">
-            {filterData.mileageRanges.map((range) => (
-              <div key={range} className="flex items-center space-x-2">
-                <Checkbox
-                  id={`mileage-${range}`}
-                  checked={activeFilters.mileageRanges.includes(range)}
-                  onCheckedChange={(checked) => handleFilterChange("mileageRanges", range, checked as boolean)}
-                />
-                <label htmlFor={`mileage-${range}`} className="text-sm cursor-pointer">
-                  {range} mi
-                </label>
-              </div>
-            ))}
-          </CollapsibleContent>
-        </Collapsible>
+        {/* Advanced Toggle */}
+        <button
+          onClick={() => setIsExpanded(!isExpanded)}
+          className="w-full mt-6 flex items-center justify-center gap-2 p-3 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors text-gray-600"
+        >
+          <Settings className="h-4 w-4" />
+          Filtros Avanzados
+          <ChevronDown className={`h-4 w-4 transition-transform ${isExpanded ? 'rotate-180' : ''}`} />
+        </button>
 
-        {/* Exterior Color Filter */}
-        <Collapsible open={openSections.exteriorColor} onOpenChange={() => toggleSection("exteriorColor")}>
-          <CollapsibleTrigger asChild>
-            <Button variant="ghost" className="w-full justify-between p-0 h-auto">
-              <div className="flex items-center space-x-2">
-                <Palette className="h-4 w-4 text-primary" />
-                <span className="font-medium">Color Exterior</span>
-                {activeFilters.exteriorColors.length > 0 && (
-                  <span className="text-xs bg-primary text-primary-foreground px-2 py-1 rounded-full">
-                    {activeFilters.exteriorColors.length}
-                  </span>
-                )}
+        {/* Advanced Filters */}
+        {isExpanded && (
+          <div className="mt-4 space-y-4 animate-in slide-in-from-top-4 duration-200">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="bg-gray-50 rounded-xl p-4">
+                <h4 className="font-medium text-gray-900 mb-2 flex items-center gap-2">
+                  <Settings className="h-4 w-4" />
+                  Tracción
+                </h4>
+                <div className="space-y-2">
+                  {filterData.drivetrains.map((option) => (
+                    <button
+                      key={option}
+                      onClick={() => handleFilterChange('drivetrains', option)}
+                      className={`w-full p-2 rounded-lg text-left transition-colors ${
+                        activeFilters.drivetrains.includes(option)
+                          ? 'bg-blue-600 text-white'
+                          : 'bg-white hover:bg-gray-100'
+                      }`}
+                    >
+                      {option}
+                    </button>
+                  ))}
+                </div>
               </div>
-              <ChevronDown
-                className={`h-4 w-4 transition-transform ${openSections.exteriorColor ? "rotate-180" : ""}`}
-              />
-            </Button>
-          </CollapsibleTrigger>
-          <CollapsibleContent className="mt-2 space-y-2">
-            {filterData.exteriorColors.map((color) => (
-              <div key={color} className="flex items-center space-x-2">
-                <Checkbox
-                  id={`color-${color}`}
-                  checked={activeFilters.exteriorColors.includes(color)}
-                  onCheckedChange={(checked) => handleFilterChange("exteriorColors", color, checked as boolean)}
-                />
-                <label htmlFor={`color-${color}`} className="text-sm cursor-pointer">
-                  {color}
-                </label>
-              </div>
-            ))}
-          </CollapsibleContent>
-        </Collapsible>
 
-        {/* Highway MPG Filter */}
-        <Collapsible open={openSections.highwayMpg} onOpenChange={() => toggleSection("highwayMpg")}>
-          <CollapsibleTrigger asChild>
-            <Button variant="ghost" className="w-full justify-between p-0 h-auto">
-              <div className="flex items-center space-x-2">
-                <Fuel className="h-4 w-4 text-primary" />
-                <span className="font-medium">Highway MPG</span>
-                {activeFilters.highwayMpg.length > 0 && (
-                  <span className="text-xs bg-primary text-primary-foreground px-2 py-1 rounded-full">
-                    {activeFilters.highwayMpg.length}
-                  </span>
-                )}
+              <div className="bg-gray-50 rounded-xl p-4">
+                <h4 className="font-medium text-gray-900 mb-2 flex items-center gap-2">
+                  <Fuel className="h-4 w-4" />
+                  Consumo MPG
+                </h4>
+                <div className="space-y-2">
+                  {filterData.mpgRanges.map((option) => (
+                    <button
+                      key={option}
+                      onClick={() => handleFilterChange('highwayMpg', option)}
+                      className={`w-full p-2 rounded-lg text-left transition-colors ${
+                        activeFilters.highwayMpg.includes(option)
+                          ? 'bg-blue-600 text-white'
+                          : 'bg-white hover:bg-gray-100'
+                      }`}
+                    >
+                      {option} MPG
+                    </button>
+                  ))}
+                </div>
               </div>
-              <ChevronDown className={`h-4 w-4 transition-transform ${openSections.highwayMpg ? "rotate-180" : ""}`} />
-            </Button>
-          </CollapsibleTrigger>
-          <CollapsibleContent className="mt-2 space-y-2">
-            {filterData.highwayMpg.map((mpg) => (
-              <div key={mpg} className="flex items-center space-x-2">
-                <Checkbox
-                  id={`highway-${mpg}`}
-                  checked={activeFilters.highwayMpg.includes(mpg)}
-                  onCheckedChange={(checked) => handleFilterChange("highwayMpg", mpg, checked as boolean)}
-                />
-                <label htmlFor={`highway-${mpg}`} className="text-sm cursor-pointer">
-                  {mpg} MPG
-                </label>
-              </div>
-            ))}
-          </CollapsibleContent>
-        </Collapsible>
-
-        {/* City MPG Filter */}
-        <Collapsible open={openSections.cityMpg} onOpenChange={() => toggleSection("cityMpg")}>
-          <CollapsibleTrigger asChild>
-            <Button variant="ghost" className="w-full justify-between p-0 h-auto">
-              <div className="flex items-center space-x-2">
-                <Fuel className="h-4 w-4 text-primary" />
-                <span className="font-medium">City MPG</span>
-                {activeFilters.cityMpg.length > 0 && (
-                  <span className="text-xs bg-primary text-primary-foreground px-2 py-1 rounded-full">
-                    {activeFilters.cityMpg.length}
-                  </span>
-                )}
-              </div>
-              <ChevronDown className={`h-4 w-4 transition-transform ${openSections.cityMpg ? "rotate-180" : ""}`} />
-            </Button>
-          </CollapsibleTrigger>
-          <CollapsibleContent className="mt-2 space-y-2">
-            {filterData.cityMpg.map((mpg) => (
-              <div key={mpg} className="flex items-center space-x-2">
-                <Checkbox
-                  id={`city-${mpg}`}
-                  checked={activeFilters.cityMpg.includes(mpg)}
-                  onCheckedChange={(checked) => handleFilterChange("cityMpg", mpg, checked as boolean)}
-                />
-                <label htmlFor={`city-${mpg}`} className="text-sm cursor-pointer">
-                  {mpg} MPG
-                </label>
-              </div>
-            ))}
-          </CollapsibleContent>
-        </Collapsible>
-      </CardContent>
-    </Card>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
   )
 }

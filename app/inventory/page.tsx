@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { InventoryFilters } from "@/components/inventory-filters"
+import { ModernCarFilter } from "@/components/inventory-filters"
 import { VehicleGrid } from "@/components/vehicle-grid"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
@@ -51,15 +51,15 @@ export default function InventoryPage() {
         </div>
 
         <div className="flex flex-col lg:flex-row gap-8">
-          {/* Filters Sidebar */}
+         
           <div className="lg:w-1/4">
-            {console.log("[v0] Rendering InventoryFilters component")}
-            <InventoryFilters activeFilters={activeFilters} onFiltersChange={setActiveFilters} />
+            
+            <ModernCarFilter activeFilters={activeFilters} onFiltersChange={setActiveFilters} />
           </div>
 
-          {/* Vehicle Grid */}
+         
           <div className="lg:w-3/4">
-            {console.log("[v0] Rendering VehicleGrid component")}
+           
             <VehicleGrid activeFilters={activeFilters} />
           </div>
         </div>
