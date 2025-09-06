@@ -5,7 +5,7 @@ import type React from "react"
 import { useState } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { Search, Menu, X, User, ChevronDown, Calendar, Car, Truck, Zap, DollarSign, Gauge } from "lucide-react"
+import { Menu, X, ChevronDown, Calendar, Car, Truck, Zap, DollarSign, Gauge } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import {
@@ -38,9 +38,9 @@ export function Navbar() {
           <div className="flex-shrink-0">
             <Link href="/" className="flex items-center">
               <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
-                <span className="text-primary-foreground font-bold text-xl">T</span>
+                <span className="text-primary-foreground font-bold text-xl">A</span>
               </div>
-              <span className="ml-2 text-xl font-bold text-foreground">Toyota Dealership</span>
+              <span className="ml-2 text-xl font-bold text-foreground">AMAAN MOTORS</span>
             </Link>
           </div>
 
@@ -53,17 +53,17 @@ export function Navbar() {
 
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="flex items-center space-x-1">
-                    <span>Inventario</span>
+                  <a className="flex items-center space-x-1 hover:text-primary text-sm font-medium">
+                    <span>Inventory</span>
                     <ChevronDown className="h-4 w-4" />
-                  </Button>
+                  </a>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-64">
                   <DropdownMenuLabel>Ver por Categoría</DropdownMenuLabel>
                   <DropdownMenuItem asChild>
                     <Link href="/inventory" className="flex items-center">
                       <Car className="h-4 w-4 mr-2" />
-                      Ver Todo el Inventario
+                      See all
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
@@ -118,53 +118,59 @@ export function Navbar() {
                 href="/services"
                 className="text-foreground hover:text-primary px-3 py-2 rounded-md text-sm font-medium"
               >
-                Servicios
+                Services
+              </Link>
+              <Link
+                  href=""
+                  className="text-foreground hover:text-primary px-3 py-2 rounded-md text-sm font-medium"
+              >
+                Apply only
               </Link>
               <Link
                 href="/contact"
                 className="text-foreground hover:text-primary px-3 py-2 rounded-md text-sm font-medium"
               >
-                Contacto
+                Contact us
               </Link>
             </div>
           </div>
 
           {/* Search and User */}
-          <div className="hidden md:flex items-center space-x-4">
-            <form onSubmit={handleSearch} className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
-              <Input
-                type="search"
-                placeholder="Buscar vehículos..."
-                className="pl-10 w-64"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-            </form>
+          {/*<div className="hidden md:flex items-center space-x-4">*/}
+          {/*  <form onSubmit={handleSearch} className="relative">*/}
+          {/*    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />*/}
+          {/*    <Input*/}
+          {/*      type="search"*/}
+          {/*      placeholder="Buscar vehículos..."*/}
+          {/*      className="pl-10 w-64"*/}
+          {/*      value={searchQuery}*/}
+          {/*      onChange={(e) => setSearchQuery(e.target.value)}*/}
+          {/*    />*/}
+          {/*  </form>*/}
 
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="rounded-full">
-                  <User className="h-5 w-5" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem asChild>
-                  <Link href="/about">Acerca de Nosotros</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link href="/contact">Contactar</Link>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem asChild>
-                  <Link href="/financing">Financiamiento</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link href="/warranty">Garantías</Link>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
+          {/*  <DropdownMenu>*/}
+          {/*    <DropdownMenuTrigger asChild>*/}
+          {/*      <Button variant="ghost" size="icon" className="rounded-full">*/}
+          {/*        <User className="h-5 w-5" />*/}
+          {/*      </Button>*/}
+          {/*    </DropdownMenuTrigger>*/}
+          {/*    <DropdownMenuContent align="end">*/}
+          {/*      <DropdownMenuItem asChild>*/}
+          {/*        <Link href="/about">Acerca de Nosotros</Link>*/}
+          {/*      </DropdownMenuItem>*/}
+          {/*      <DropdownMenuItem asChild>*/}
+          {/*        <Link href="/contact">Contactar</Link>*/}
+          {/*      </DropdownMenuItem>*/}
+          {/*      <DropdownMenuSeparator />*/}
+          {/*      <DropdownMenuItem asChild>*/}
+          {/*        <Link href="/financing">Financiamiento</Link>*/}
+          {/*      </DropdownMenuItem>*/}
+          {/*      <DropdownMenuItem asChild>*/}
+          {/*        <Link href="/warranty">Garantías</Link>*/}
+          {/*      </DropdownMenuItem>*/}
+          {/*    </DropdownMenuContent>*/}
+          {/*  </DropdownMenu>*/}
+          {/*</div>*/}
 
           {/* Mobile menu button */}
           <div className="md:hidden">

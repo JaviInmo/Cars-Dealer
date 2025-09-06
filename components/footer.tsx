@@ -3,30 +3,30 @@ import { Facebook, Twitter, Instagram, Youtube } from "lucide-react"
 
 export function Footer() {
   return (
-    <footer className="bg-primary text-primary-foreground">
+    <footer className="bg-black text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid md:grid-cols-4 gap-8">
           <div>
             <div className="flex items-center mb-4">
               <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center mr-2">
-                <span className="text-primary font-bold">T</span>
+                <span className="text-white font-bold">T</span>
               </div>
               <span className="text-lg font-bold">Toyota Dealership</span>
             </div>
-            <p className="text-primary-foreground/80 mb-4">
+            <p className="text-white mb-4">
               Tu concesionario de confianza para vehículos Toyota nuevos y usados.
             </p>
             <div className="flex space-x-4">
-              <Link href="#" className="text-primary-foreground/80 hover:text-white">
+              <Link href="#" className="text-white hover:text-white">
                 <Facebook className="h-5 w-5" />
               </Link>
-              <Link href="#" className="text-primary-foreground/80 hover:text-white">
+              <Link href="#" className="text-white hover:text-white">
                 <Twitter className="h-5 w-5" />
               </Link>
-              <Link href="#" className="text-primary-foreground/80 hover:text-white">
+              <Link href="#" className="text-white hover:text-white">
                 <Instagram className="h-5 w-5" />
               </Link>
-              <Link href="#" className="text-primary-foreground/80 hover:text-white">
+              <Link href="#" className="text-white hover:text-white">
                 <Youtube className="h-5 w-5" />
               </Link>
             </div>
@@ -36,22 +36,22 @@ export function Footer() {
             <h3 className="text-lg font-semibold mb-4">Inventario</h3>
             <ul className="space-y-2">
               <li>
-                <Link href="/inventory" className="text-primary-foreground/80 hover:text-white">
+                <Link href="/inventory" className="text-white hover:text-white">
                   Todos los Vehículos
                 </Link>
               </li>
               <li>
-                <Link href="/inventory?type=new" className="text-primary-foreground/80 hover:text-white">
+                <Link href="/inventory?type=new" className="text-white hover:text-white">
                   Vehículos Nuevos
                 </Link>
               </li>
               <li>
-                <Link href="/inventory?type=used" className="text-primary-foreground/80 hover:text-white">
+                <Link href="/inventory?type=used" className="text-white hover:text-white">
                   Vehículos Usados
                 </Link>
               </li>
               <li>
-                <Link href="/inventory?type=certified" className="text-primary-foreground/80 hover:text-white">
+                <Link href="/inventory?type=certified" className="text-white hover:text-white">
                   Certificados
                 </Link>
               </li>
@@ -62,22 +62,22 @@ export function Footer() {
             <h3 className="text-lg font-semibold mb-4">Servicios</h3>
             <ul className="space-y-2">
               <li>
-                <Link href="/services" className="text-primary-foreground/80 hover:text-white">
+                <Link href="/services" className="text-white hover:text-white">
                   Mantenimiento
                 </Link>
               </li>
               <li>
-                <Link href="/parts" className="text-primary-foreground/80 hover:text-white">
+                <Link href="/parts" className="text-white hover:text-white">
                   Repuestos
                 </Link>
               </li>
               <li>
-                <Link href="/financing" className="text-primary-foreground/80 hover:text-white">
+                <Link href="/financing" className="text-white hover:text-white">
                   Financiamiento
                 </Link>
               </li>
               <li>
-                <Link href="/warranty" className="text-primary-foreground/80 hover:text-white">
+                <Link href="/warranty" className="text-white hover:text-white">
                   Garantías
                 </Link>
               </li>

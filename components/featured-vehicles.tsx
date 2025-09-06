@@ -5,6 +5,8 @@ import { ChevronLeft, ChevronRight, Eye, Heart } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { CategoryNavigation, type Category } from "@/components/category-navigation"
+
 
 const featuredVehicles = [
   {
@@ -56,6 +58,16 @@ const featuredVehicles = [
 export function FeaturedVehicles() {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [itemsPerView, setItemsPerView] = useState(3)
+  const [activeCategory, setActiveCategory] = useState<string>("")
+
+  // Datos de ejemplo - vehículos
+  const vehicleCategories: Category[] = [
+    { id: "cars-minivan", label: "Cars & Minivan" },
+    { id: "trucks", label: "Trucks" },
+    { id: "crossovers-suvs", label: "Crossovers & SUVs" },
+    { id: "electrified", label: "Electrified" },
+    { id: "upcoming", label: "Upcoming Vehicles" },
+  ]
 
   useEffect(() => {
     const handleResize = () => {
@@ -86,23 +98,23 @@ export function FeaturedVehicles() {
   return (
     <section className="py-16 bg-card">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between mb-12">
+        <div className="flex items-center justify-center mb-12">
           <div>
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">Vehículos Destacados</h2>
-            <p className="text-lg text-muted-foreground">Descubre nuestras mejores ofertas y vehículos más populares</p>
-          </div>
-
-          <div className="hidden md:flex space-x-2">
-            <Button variant="outline" size="icon" onClick={prevSlide}>
-              <ChevronLeft className="h-5 w-5" />
-            </Button>
-            <Button variant="outline" size="icon" onClick={nextSlide}>
-              <ChevronRight className="h-5 w-5" />
-            </Button>
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4 text-center">Explore All Vehicles</h2>
           </div>
         </div>
 
-        <div className="relative overflow-hidden">
+        <CategoryNavigation
+            categories={vehicleCategories}
+            defaultActiveId="cars-minivan"
+            onCategoryChange={(id) => {
+              setActiveCategory(id)
+              console.log("Categoría seleccionada:", id)
+            }}
+            className="flex justify-center mb-8"
+        />
+
+        <div className="relative overflow-hidden mb-4">
           <div
             className="flex transition-transform duration-300 ease-in-out"
             style={{
@@ -166,6 +178,18 @@ export function FeaturedVehicles() {
               </div>
             ))}
           </div>
+        </div>
+
+        <div className="hidden md:flex space-x-10 justify-center">
+          <Button variant="outline" size="icon" onClick={prevSlide}>
+            <ChevronLeft className="h-5 w-5" />
+          </Button>
+          <Button variant="outline" size="icon" onClick={nextSlide}>
+            <ChevronRight className="h-5 w-5" />
+          </Button>
+          {/*<div className="">*/}
+          {/*  <a className="block" href="/inventor">See All</a>*/}
+          {/*</div>*/}
         </div>
 
         {/* Mobile Navigation */}

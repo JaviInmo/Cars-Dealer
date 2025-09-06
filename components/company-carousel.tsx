@@ -56,7 +56,7 @@ export function CompanyCarousel() {
     <section className="py-16 bg-card">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">Conoce Toyota</h2>
+          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">Discover Amaan Motors</h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             Descubre la historia, tecnología y compromiso que nos hace líderes en la industria automotriz
           </p>
@@ -90,7 +90,7 @@ export function CompanyCarousel() {
           <Button
             variant="outline"
             size="icon"
-            className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/20 hover:bg-white/30 backdrop-blur-sm border-white/30"
+            className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/20 hover:bg-white/30 backdrop-blur-lg border-white/30"
             onClick={prevSlide}
           >
             <ChevronLeft className="h-6 w-6 text-white" />
@@ -99,7 +99,7 @@ export function CompanyCarousel() {
           <Button
             variant="outline"
             size="icon"
-            className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/20 hover:bg-white/30 backdrop-blur-sm border-white/30"
+            className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/20 hover:bg-white/30 backdrop-blur-lg border-white/30"
             onClick={nextSlide}
           >
             <ChevronRight className="h-6 w-6 text-white" />
